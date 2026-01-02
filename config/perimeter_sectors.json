@@ -1,0 +1,15 @@
+{
+  "sectors": [
+    {
+      "sector_id": "SEC-ALPHA-01",
+      "name": "Northern Ridge Boundary",
+      "alert_level": "CRITICAL",
+      "vertices": [
+        {"lat": 32.726600, "lon": 74.857000, "alt": 420.0},
+        {"lat": 32.727800, "lon": 74.858200, "alt": 425.0},
+        {"lat": 32.726900, "lon": 74.859500, "alt": 418.0},
+        {"lat": 32.725800, "lon": 74.858100, "alt": 412.0}
+      ]
+    }
+  ]
+}
