@@ -1,0 +1,15 @@
+# Tactical Operational SOP: Agniveer Sentinel Edge
+
+## 1. Perimeter Setup & Sensor Calibration
+1. Deploy LWIR optical thermal units at high elevation posts.
+2. Align infrared tripwire emitters along designated sectors (Sec-Alpha, Sec-Bravo).
+3. Validate geofence sector vertices in `config/perimeter_sectors.json`.
+4. Run self-diagnostics: `python -m unittest discover tests`.
+
+## 2. Low-Light Night-Vision Tuning
+- Ensure `contrast_normalize` is active in `config/edge_runtime.json`.
+- Set `low_light_gamma` between 0.50 and 0.70 during zero-lumen nighttime conditions.
+
+## 3. Radio Mesh Gateway Interfacing
+- The edge node broadcasts critical alerts over UHF packets via `AlertQueue.to_mesh_payload()`.
+- Maximum latency target: < 50ms for Tier-1 CRITICAL alarms.
