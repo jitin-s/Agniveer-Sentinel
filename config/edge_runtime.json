@@ -1,0 +1,23 @@
+{
+  "camera": {
+    "stream_fps": 30,
+    "resolution": [1920, 1080],
+    "low_light_gamma": 0.65,
+    "contrast_normalize": true
+  },
+  "detection": {
+    "confidence_threshold": 0.60,
+    "iou_threshold": 0.45,
+    "nms_enabled": true
+  },
+  "telemetry": {
+    "tripwire_window_seconds": 1.5,
+    "tripwire_min_pulses": 3,
+    "gps_deadband_meters": 1.8
+  },
+  "alerts": {
+    "sound_enabled": true,
+    "mesh_gateway_port": 8899,
+    "priority_escalation_seconds": 30
+  }
+}
