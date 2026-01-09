@@ -1,0 +1,15 @@
+# Agniveer Sentinel Edge Architecture
+
+```
+[LWIR Thermal Sensors] ────► [Packet Decoder] ────┐
+                                                  ▼
+[Visible Cameras]      ────► [Low-Light Preproc] ──► [Threat Classifier]
+                                                  ▲
+[Perimeter Beams]      ────► [Debounce Filter] ───┘
+                                                  │
+                                                  ▼
+                                         [Priority Dispatch Queue]
+                                                  │
+                                                  ▼
+                                       [Tactical Mesh Gateway]
+```
