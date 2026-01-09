@@ -1,0 +1,6 @@
+{
+  "profiles": {
+    "high_sensitivity": {"temp_delta_c": 1.2, "refresh_rate_hz": 25},
+    "foliage_filtered": {"temp_delta_c": 2.5, "refresh_rate_hz": 15}
+  }
+}
