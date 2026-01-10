@@ -9,3 +9,7 @@
 - High frequency coordinate refresh: 10 Hz
 - GPS drift deadband: 1.8 meters
 - Ray-casting bounding box pre-filter for sub-millisecond evaluation.
+
+# Operational telemetry calibration [rev 1]
+
+<!-- Telemetry sync milestone -->
