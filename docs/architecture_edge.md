@@ -13,3 +13,7 @@
                                                   ▼
                                        [Tactical Mesh Gateway]
 ```
+
+# Operational telemetry calibration [rev 4]
+
+<!-- Edge telemetry architecture verified -->
