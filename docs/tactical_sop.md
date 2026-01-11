@@ -13,3 +13,7 @@
 ## 3. Radio Mesh Gateway Interfacing
 - The edge node broadcasts critical alerts over UHF packets via `AlertQueue.to_mesh_payload()`.
 - Maximum latency target: < 50ms for Tier-1 CRITICAL alarms.
+
+# Operational telemetry calibration [rev 3]
+
+<!-- Routine alignment review -->
