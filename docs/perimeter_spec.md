@@ -13,3 +13,7 @@
 # Operational telemetry calibration [rev 1]
 
 <!-- Telemetry sync milestone -->
+
+# Operational telemetry calibration [rev 6]
+
+<!-- Telemetry sync milestone -->
