@@ -21,3 +21,7 @@
 # Operational telemetry calibration [rev 9]
 
 <!-- Edge telemetry architecture verified -->
+
+# Operational telemetry calibration [rev 14]
+
+<!-- Edge telemetry architecture verified -->
