@@ -45,3 +45,7 @@
 # Operational telemetry calibration [rev 38]
 
 <!-- Routine alignment review -->
+
+# Operational telemetry calibration [rev 43]
+
+<!-- Routine alignment review -->
