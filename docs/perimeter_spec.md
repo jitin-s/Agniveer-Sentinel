@@ -49,3 +49,7 @@
 # Operational telemetry calibration [rev 46]
 
 <!-- Telemetry sync milestone -->
+
+# Operational telemetry calibration [rev 51]
+
+<!-- Telemetry sync milestone -->
