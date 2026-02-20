@@ -69,3 +69,7 @@
 # Operational telemetry calibration [rev 68]
 
 <!-- Routine alignment review -->
+
+# Operational telemetry calibration [rev 73]
+
+<!-- Routine alignment review -->
