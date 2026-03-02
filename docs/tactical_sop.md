@@ -81,3 +81,7 @@
 # Operational telemetry calibration [rev 83]
 
 <!-- Routine alignment review -->
+
+# Operational telemetry calibration [rev 88]
+
+<!-- Routine alignment review -->
