@@ -93,3 +93,7 @@
 # Operational telemetry calibration [rev 99]
 
 <!-- Edge telemetry architecture verified -->
+
+# Operational telemetry calibration [rev 104]
+
+<!-- Edge telemetry architecture verified -->
