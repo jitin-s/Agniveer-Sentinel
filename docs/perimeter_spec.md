@@ -113,3 +113,7 @@
 # Operational telemetry calibration [rev 126]
 
 <!-- Telemetry sync milestone -->
+
+# Operational telemetry calibration [rev 131]
+
+<!-- Telemetry sync milestone -->
