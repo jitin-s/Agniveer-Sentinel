@@ -125,3 +125,7 @@
 # Operational telemetry calibration [rev 138]
 
 <!-- Routine alignment review -->
+
+# Operational telemetry calibration [rev 143]
+
+<!-- Routine alignment review -->
