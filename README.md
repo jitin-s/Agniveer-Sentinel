@@ -60,7 +60,20 @@ pip install -r requirements.txt
 
 ---
 
-## 🔑 Step 4: Configure API Keys
+## 🔑 How to Generate a Gemini API Key
+
+To use the live AI reasoning and patching capabilities, you will need a Google Gemini API Key. Follow these steps to generate one for free:
+
+1.  Navigate to **[Google AI Studio](https://aistudio.google.com/)**.
+2.  Log in using your standard Google account.
+3.  Click the blue **"Get API key"** button in the top left corner.
+4.  Select **"Create API key"** and choose to either generate it in a new Google Cloud project or an existing one.
+5.  Copy your generated API Key (which typically starts with `AIzaSy...`).
+6.  Proceed to the environment configuration step below to paste your key.
+
+---
+
+## ⚙️ Step 4: Configure API Keys
 
 1.  Copy the environment template file to create your local `.env` file:
     ```bash
@@ -74,7 +87,7 @@ pip install -r requirements.txt
 ACTIVE_PROVIDER=gemini
 
 # Google Gemini API Key
-GEMINI_API_KEY=AIzaSy...
+GEMINI_API_KEY=your_copied_api_key_here
 
 # OpenAI API Key (ChatGPT)
 OPENAI_API_KEY=sk-proj-...
@@ -99,6 +112,13 @@ You can add your own custom files to `test_targets/` or create your own custom d
 ## 💻 Running Agniveer Sentinel (Shell-Specific Commands)
 
 Make sure your virtual environment is active (`(.venv)` should be visible in your prompt) before executing the commands.
+
+### ❓ Get CLI Help and Options
+To view all available commands, modes, and flag options, run the help command:
+```bash
+python agniveer_sentinel.py -h
+```
+*(Or use `python agniveer_sentinel.py --help` for the full instruction printout).*
 
 ### 1. Run the Full Self-Healing Pipeline (Scan ➔ Fuzz ➔ Patch ➔ Verify)
 
