@@ -1,0 +1,19 @@
+# Virtual Environment
+.venv/
+__pycache__/
+*.pyc
+
+# Local Environment Variables (Contains API Keys - DO NOT COMMIT)
+.env
+
+# Temporary build / test files
+test_targets/sentinel_remediator*
+test_targets/temp_test*
+temp_test.c
+temp_test.exe
+temp_test
+*.patched.c
+*.patched
+
+# PowerPoint temp locks
+~$*.pptx
