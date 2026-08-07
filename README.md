@@ -194,3 +194,13 @@ Agniveer-Sentinel dynamically routes code repair prompts to the client configure
 *   **`openai`**: Uses OpenAI `gpt-4o-mini` model.
 *   **`anthropic`**: Uses Anthropic `claude-3-5-sonnet-20241022` model.
 *   **`local`**: Local mode using rule-based patch fallbacks (ideal for air-gapped sandboxes).
+
+---
+
+## ⚖️ Disclaimer
+Agniveer-Sentinel is developed for educational, research, and authorized security evaluation purposes only. Running security analysis, dynamic fuzzing, and automated patching on target software should only be conducted on codebases you own or have explicit authorization to test. The authors and contributors are not responsible for any misuse, data loss, service interruption, or damages caused by the execution of this tool.
+
+---
+
+## 📄 License
+This project is open-source and licensed under the terms of the **[MIT License](LICENSE)**. Feel free to use, modify, and distribute it in accordance with the license conditions.
