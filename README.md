@@ -193,7 +193,7 @@ Agniveer-Sentinel dynamically routes code repair prompts to the client configure
 *   **`gemini`** (Default): Uses Google `gemini-3.5-flash` model.
 *   **`openai`**: Uses OpenAI `gpt-4o-mini` model.
 *   **`anthropic`**: Uses Anthropic `claude-3-5-sonnet-20241022` model.
-<h1>(Comming Soon)</h1>
+<h1>(Coming Soon)</h1>
 
 *   **`local`**: Local mode using rule-based patch fallbacks (ideal for air-gapped sandboxes).
 
