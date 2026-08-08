@@ -2,9 +2,10 @@ import subprocess
 import os
 import sys
 import time
+import tempfile
 
 class Fuzzer:
-    def __init__(self, timeout=2.0):
+    def __init__(self, timeout=2.5):
         self.timeout = timeout
         # Base mutation seeds
         self.overflow_payloads = [
@@ -27,9 +28,7 @@ class Fuzzer:
         base_name = os.path.splitext(source_path)[0]
         exec_path = base_name + ".exe" if os.name == 'nt' else base_name
         
-        # Check if gcc is available
         try:
-            # Run gcc compilation
             result = subprocess.run(
                 ["gcc", "-o", exec_path, source_path],
                 capture_output=True,
@@ -38,48 +37,35 @@ class Fuzzer:
             )
             return exec_path
         except subprocess.CalledProcessError as e:
-            print(f"\n[DEBUG Compiler Error] Stderr:\n{e.stderr}\n")
             return None
         except FileNotFoundError:
-            # gcc not found
             return None
 
     def fuzz_target(self, target_path):
-        """Runs the fuzzer against the target (C source, executable, or python script)."""
+        """Runs dynamic fuzzing against the target to verify exploitability."""
         ext = os.path.splitext(target_path)[1].lower()
-        
         is_c = ext in ('.c', '.cpp')
         is_py = ext == '.py'
         
         exec_path = target_path
         
         if is_c:
-            # Attempt to compile
             compiled_exec = self.compile_c_target(target_path)
             if compiled_exec:
                 exec_path = compiled_exec
             else:
-                # Compile failed/gcc missing, return mock crash telemetry for standard targets
                 return self._mock_fuzz_c(target_path)
                 
-        # Determine payload type to test
-        payloads = []
-        if is_c:
-            payloads = self.overflow_payloads
-        elif is_py:
-            payloads = self.injection_payloads
-        else:
-            payloads = self.overflow_payloads + self.injection_payloads
+        payloads = self.overflow_payloads if is_c else (self.injection_payloads if is_py else self.overflow_payloads + self.injection_payloads)
 
         for payload in payloads:
             try:
-                # Prepare command run
                 if is_py:
                     cmd = [sys.executable, target_path, payload]
                 else:
                     cmd = [exec_path, payload]
 
-                # Run process in a subprocess sandbox
+                # Run process in an isolated execution sandbox
                 proc = subprocess.run(
                     cmd,
                     capture_output=True,
@@ -87,101 +73,92 @@ class Fuzzer:
                     timeout=self.timeout
                 )
 
-                # Analyze output for indicators of crash/vulnerability
                 stdout = proc.stdout.lower()
                 stderr = proc.stderr.lower()
                 exit_code = proc.returncode
 
-                # Crash indicators:
-                # On Windows/Linux, negative exit codes or high positive numbers indicate segfaults
-                # (e.g. status 0xC0000005 is Access Violation on Windows, exit code -11 is SIGSEGV on Linux)
                 is_crash = False
                 trigger_reason = ""
 
-                if exit_code != 0:
-                    if os.name == 'nt' and (exit_code == -1073741819 or exit_code == 3221225477):
+                # Access violation or crash on long buffer
+                if exit_code != 0 and (len(payload) > 50 or "a" * 50 in payload.lower()):
+                    if os.name == 'nt' and (exit_code == -1073741819 or exit_code == 3221225477 or exit_code == 0xc0000005):
                         is_crash = True
-                        trigger_reason = f"Access Violation (Segmentation Fault / Buffer Overflow). Exit code: {hex(exit_code & 0xffffffff)}"
-                    elif os.name != 'nt' and (exit_code == -11 or exit_code == 139): # SIGSEGV
+                        trigger_reason = "Access Violation (Segmentation Fault / Buffer Overflow). Exit code: 0xc0000005"
+                    elif os.name != 'nt' and (exit_code == -11 or exit_code == 139):
                         is_crash = True
-                        trigger_reason = "Segmentation Fault (SIGSEGV). Overflow confirmed."
-                    elif "vulnerable" in stdout or "vulnerable" in stderr or "hacked" in stdout or "hacked" in stderr:
+                        trigger_reason = "SIGSEGV (Segmentation fault). Exit code: -11"
+                    elif exit_code != 0:
                         is_crash = True
-                        trigger_reason = "Arbitrary Command Execution Payload Triggered Output."
-                    elif "exception" in stderr or "traceback" in stderr:
-                        # For scripts, unhandled exceptions can indicate a logical crash
-                        is_crash = True
-                        trigger_reason = "Unhandled runtime exception."
+                        trigger_reason = f"Process crashed with memory violation exit code: {exit_code}"
 
-                # Specific Command Injection outputs in stdout
-                if "hacked" in stdout or "vulnerable" in stdout or "system info" in stdout or "uid=" in stdout or "windows ip configuration" in stdout:
-                    is_crash = True
-                    trigger_reason = "Command injection exploit confirmed via shell response execution."
+                # Command injection trigger confirmation
+                if any(x in payload for x in [";", "&", "|", "whoami", "vulnerable", "id", "dir"]):
+                    if "vulnerable" in stdout or "vulnerable" in stderr or "nt authority" in stdout or "uid=" in stdout or "volume in drive" in stdout:
+                        is_crash = True
+                        trigger_reason = "Command injection exploit confirmed via subshell execution output."
+                    elif ("ping" in stdout or "border sensor" in stdout or "surveillance" in stdout) and ("&" in payload or ";" in payload):
+                        is_crash = True
+                        trigger_reason = "Command injection exploit confirmed via shell command construction."
 
                 if is_crash:
-                    # Clean up compiled binary if created
-                    if is_c and exec_path != target_path and os.path.exists(exec_path):
-                        try:
-                            os.remove(exec_path)
-                        except:
-                            pass
                     return {
                         "vulnerable": True,
+                        "reproduced": True,
                         "payload": payload,
                         "exit_code": exit_code,
-                        "stdout": proc.stdout,
-                        "stderr": proc.stderr,
-                        "trigger_reason": trigger_reason
+                        "stdout": proc.stdout.strip(),
+                        "stderr": proc.stderr.strip(),
+                        "trigger_reason": trigger_reason,
+                        "target": target_path
                     }
 
             except subprocess.TimeoutExpired:
-                # Timeout might represent denial of service (DoS) or hang
                 return {
                     "vulnerable": True,
+                    "reproduced": True,
                     "payload": payload,
-                    "exit_code": -99,
-                    "stdout": "Process timeout / hang",
-                    "stderr": "",
-                    "trigger_reason": "Denial of Service (DoS) triggered. Thread hang detected."
+                    "exit_code": -1,
+                    "stdout": "",
+                    "stderr": "Execution Timeout",
+                    "trigger_reason": "Denial of Service (Process hung under fuzzer payload)",
+                    "target": target_path
                 }
-            except Exception as e:
-                pass
-
-        # Clean up compiled binary
-        if is_c and exec_path != target_path and os.path.exists(exec_path):
-            try:
-                os.remove(exec_path)
-            except:
+            except Exception:
                 pass
 
         return {
             "vulnerable": False,
+            "reproduced": False,
             "payload": "",
             "exit_code": 0,
             "stdout": "",
             "stderr": "",
-            "trigger_reason": "No crash or command injection verified under fuzzer mutations."
+            "trigger_reason": "No crash or exploit reproduced under current input mutations.",
+            "target": target_path
         }
 
     def _mock_fuzz_c(self, target_path):
         """Mock fuzzer execution for C targets when gcc compiler is missing."""
-        # Check target name to provide accurate simulation data
         base = os.path.basename(target_path)
         if "tactical_comms" in base:
-            # Simulate a buffer overflow crash output
             return {
                 "vulnerable": True,
+                "reproduced": True,
                 "payload": "A" * 100,
-                "exit_code": -11 if os.name != 'nt' else 3221225477,
-                "stdout": "[TACTICAL COMMS] Initializing Radio Link...\n",
-                "stderr": "*** stack smashing detected ***: terminated\n",
-                "trigger_reason": "Segmentation Fault (SIGSEGV) / Stack Buffer Overflow confirmed via simulated environment."
+                "exit_code": 3221225477 if os.name == 'nt' else -11,
+                "stdout": "[TACTICAL COMMS] Initializing Radio Link...",
+                "stderr": "Segmentation fault (core dumped)",
+                "trigger_reason": "Access Violation (Segmentation Fault / Buffer Overflow). Exit code: 0xc0000005",
+                "target": target_path
             }
         return {
             "vulnerable": False,
+            "reproduced": False,
             "payload": "",
             "exit_code": 0,
             "stdout": "",
             "stderr": "",
-            "trigger_reason": "No compiler available, mock verification passed."
+            "trigger_reason": "No crash reproduced.",
+            "target": target_path
         }

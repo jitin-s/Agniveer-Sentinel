@@ -1,13 +1,67 @@
-# Agniveer-Sentinel (AI Kavach)
-### Autonomous Cyber-Reasoning System (CRS) for Automated Security Analysis and Code Repair
+# Agniveer Sentinel (AI Kavach)
+### Autonomous AI Cyber-Reasoning & Remediation System (CRS)
 
-Agniveer-Sentinel is an autonomous, self-healing Cyber-Reasoning System (CRS) designed to defend software applications. It provides an automated security loop (AI Kavach / Shield) that scans codebases for vulnerabilities, verifies findings dynamically using sandboxed fuzzing to eliminate false positives, generates secure patches using state-of-the-art LLMs, and verifies the repairs through an automated regression test harness.
-
-Agniveer-Sentinel can scan, verify, and remediate vulnerabilities (such as buffer overflows, command injections, dynamic code evaluation, and logic exploits) across C and Python applications, with an architecture designed to support new languages and vulnerability classes.
+> **"An autonomous AI cyber-reasoning and remediation system that detects vulnerabilities using static and dynamic analysis, reasons about their root cause, generates security patches, and autonomously verifies those patches through adversarial and regression testing."**
 
 ---
 
-## 🔒 Security Notice: Keep API Keys Safe
+## 🏛️ System Architecture
+
+Agniveer Sentinel implements a complete, closed-loop cyber-reasoning pipeline built for mission-critical and defense-grade environments:
+
+```
+[Target Source Code]
+        │
+        ▼
+[CLI Orchestrator]
+        │
+        ▼
+[Stage 1: Static AST & Vulnerability Scan]
+        │
+        ▼
+[Stage 2: Dynamic Fuzzing & Exploit Verification Sandbox]
+        │
+        ▼
+[Stage 3: AI Reasoning Engine (CWE, Root-Cause, Attack Surface, Strategy)]
+        │
+        ▼
+[Patch Generator (Production-Safe & Hardened Remediation)]
+        │
+        ▼
+[Stage 4: 5-Point Security & Regression Verification Suite]
+   ├── 1. Original exploit reproduced before patch
+   ├── 2. Exploit blocked & neutralized after patch
+   ├── 3. Valid functional inputs passed
+   ├── 4. Regression test suite passed
+   └── 5. Post-patch AST re-scan clean (0 new issues)
+        │
+        ├── [FAIL] ──► [Patch-Failure Retry Loop (Max 3 Attempts)]
+        │
+        ▼ [PASS]
+[Evidence Package Preservation (runs/ directory)]
+        │
+        ▼
+[Final Autonomous Verdict]
+```
+
+---
+
+## 💻 CLI Commands Reference
+
+Agniveer Sentinel provides 6 modular subcommands:
+
+| Command | Purpose |
+| :--- | :--- |
+| `python agniveer_sentinel.py scan --target <target>` | Find vulnerabilities without modifying the target file. |
+| `python agniveer_sentinel.py run --target <target>` | Run the complete autonomous self-healing pipeline. |
+| `python agniveer_sentinel.py verify --target <target>` | Verify whether a vulnerability is exploitable or whether a patch is effective. |
+| `python agniveer_sentinel.py patch --target <target>` | Generate and apply an AI remediation patch directly. |
+| `python agniveer_sentinel.py report --run <RUN_ID>` | Generate and display the final evidence report from a previous run. |
+| `python agniveer_sentinel.py rollback --run <RUN_ID>` | Restore the original source file state from the preserved evidence package. |
+
+---
+
+## 🔒 Security Notice & API Key Safety
 *   **DO NOT** push your local `.env` file containing private API keys to GitHub.
 *   A `.gitignore` file is pre-configured in this repository to prevent tracking of `.env` files and `.venv` folders.
 
@@ -15,45 +69,28 @@ Agniveer-Sentinel can scan, verify, and remediate vulnerabilities (such as buffe
 
 ## 🚀 Setup & Installation Guide
 
-Follow these steps to set up and run the Agniveer-Sentinel CRS locally on your machine.
-
 ### 1. Clone the GitHub Repository
-Open your terminal and run the following command to clone the codebase:
 ```bash
 git clone https://github.com/jitin-s/Agniveer-Sentinel.git
 cd Agniveer-Sentinel
 ```
 
-### 2. Create a Virtual Environment
-Initialize a Python virtual environment to manage dependencies locally:
+### 2. Create and Activate Virtual Environment
 ```bash
+# Create environment
 python -m venv .venv
+
+# Activate on Git Bash (Windows) / macOS / Linux:
+source .venv/Scripts/activate   # (or source .venv/bin/activate on Linux/Mac)
+
+# Activate on Command Prompt (cmd.exe):
+.venv\Scripts\activate.bat
+
+# Activate on PowerShell:
+.venv/Scripts/Activate.ps1
 ```
 
-### 3. Activate the Virtual Environment
-Activate the environment based on your current terminal/shell:
-
-*   **Git Bash (Windows):**
-    ```bash
-    source .venv/Scripts/activate
-    ```
-*   **PowerShell (Windows):**
-    ```powershell
-    .venv/Scripts/Activate.ps1
-    ```
-*   **Command Prompt (cmd.exe / Windows):**
-    ```cmd
-    .venv\Scripts\activate.bat
-    ```
-*   **Linux / macOS (Terminal):**
-    ```bash
-    source .venv/bin/activate
-    ```
-
-Once activated, your command line prompt should display `(.venv)` at the beginning.
-
-### 4. Install Project Dependencies
-Install the required libraries (including terminal layout and LLM client SDKs):
+### 3. Install Dependencies
 ```bash
 pip install -r requirements.txt
 ```
@@ -62,25 +99,13 @@ pip install -r requirements.txt
 
 ## 🔑 How to Generate a Gemini API Key
 
-To use the live AI reasoning and patching capabilities, you will need a Google Gemini API Key. Follow these steps to generate one for free:
-
+To enable real-time LLM reasoning and patch synthesis:
 1.  Navigate to **[Google AI Studio](https://aistudio.google.com/)**.
-2.  Log in using your standard Google account.
-3.  Click the blue **"Get API key"** button in the top left corner.
-4.  Select **"Create API key"** and choose to either generate it in a new Google Cloud project or an existing one.
-5.  Copy your generated API Key (which typically starts with `AIzaSy...`).
-6.  Proceed to the environment configuration step below to paste your key.
-
----
-
-## ⚙️ Step 4: Configure API Keys
-
-1.  Copy the environment template file to create your local `.env` file:
-    ```bash
-    cp .env.template .env
-    ```
-2.  Open the newly created **`.env`** file in your text editor.
-3.  Add your API keys and select your active model provider:
+2.  Sign in with your Google account.
+3.  Click the blue **"Get API key"** button in the top-left corner.
+4.  Select **"Create API key"**.
+5.  Copy your generated key (starts with `AIzaSy...`).
+6.  Paste it into your local `.env` file:
 
 ```env
 # Active LLM Provider: Choose from 'gemini', 'openai', 'anthropic', or 'local'
@@ -98,111 +123,66 @@ ANTHROPIC_API_KEY=sk-ant-...
 
 ---
 
-## 🛡️ Setting Up Vulnerability Targets
+## 🛡️ Sample Vulnerability Targets
 
-Agniveer-Sentinel scans and tests code targets dynamically. You can place your test subjects in any directory. The repository comes pre-loaded with sample vulnerability files under the **`test_targets/`** directory:
-
-1.  **`test_targets/tactical_comms.c`**: A C program demonstrating a stack buffer overflow.
-2.  **`test_targets/sensor_sync.py`**: A Python script demonstrating shell command injection.
-
-You can add your own custom files to `test_targets/` or create your own custom directory containing your software target files.
+Sample targets demonstrating distinct security challenges are included in `test_targets/`:
+1.  **`test_targets/sensor_sync.py`**: Shell Command Injection (`CWE-78`).
+2.  **`test_targets/tactical_comms.c`**: Stack-based Buffer Overflow (`CWE-121`).
 
 ---
 
-## 💻 Running Agniveer Sentinel (Shell-Specific Commands)
+## 🧪 Usage Examples
 
-Make sure your virtual environment is active (`(.venv)` should be visible in your prompt) before executing the commands.
-
-### ❓ Get CLI Help and Options
-To view all available commands, modes, and flag options, run the help command:
+### 1. Run the Complete Autonomous Pipeline
 ```bash
-python agniveer_sentinel.py -h
+python agniveer_sentinel.py run --target test_targets/sensor_sync.py
 ```
-*(Or use `python agniveer_sentinel.py --help` for the full instruction printout).*
 
-### 1. Run the Full Self-Healing Pipeline (Scan ➔ Fuzz ➔ Patch ➔ Verify)
+### 2. Scan a File or Directory for Weaknesses
+```bash
+python agniveer_sentinel.py scan --target test_targets/
+```
 
-*   **On Git Bash (Windows) & Linux / macOS:**
-    *   **Python target:**
-        ```bash
-        python agniveer_sentinel.py run --target test_targets/sensor_sync.py
-        ```
-    *   **C target:**
-        ```bash
-        python agniveer_sentinel.py run --target test_targets/tactical_comms.c
-        ```
+### 3. Verify Exploitability in Sandbox
+```bash
+python agniveer_sentinel.py verify --target test_targets/sensor_sync.py
+```
 
-*   **On Command Prompt (cmd.exe - Windows):**
-    *   **Python target:**
-        ```cmd
-        python agniveer_sentinel.py run --target test_targets\sensor_sync.py
-        ```
-    *   **C target:**
-        ```cmd
-        python agniveer_sentinel.py run --target test_targets\tactical_comms.c
-        ```
+### 4. Review Run Evidence Report
+```bash
+python agniveer_sentinel.py report --run latest
+```
 
-*   **On PowerShell (Windows):**
-    *   **Python target:**
-        ```powershell
-        python .\agniveer_sentinel.py run --target .\test_targets\sensor_sync.py
-        ```
-    *   **C target:**
-        ```powershell
-        python .\agniveer_sentinel.py run --target .\test_targets\tactical_comms.c
-        ```
+### 5. Rollback Target to Pre-Patch State
+```bash
+python agniveer_sentinel.py rollback --run latest
+```
 
 ---
 
-### 2. Run Modules Individually
+## 📦 Reproducible Evidence Packages (`runs/`)
 
-*   **On Git Bash & Linux / macOS:**
-    *   **Static Scanner only:**
-        ```bash
-        python agniveer_sentinel.py scan --target test_targets/
-        ```
-    *   **Sandbox Fuzzer only:**
-        ```bash
-        python agniveer_sentinel.py fuzz --target test_targets/tactical_comms.c
-        ```
+Every autonomous execution creates a timestamped evidence directory preserving machine-readable JSON reports, unified diffs, and source snapshots:
 
-*   **On Command Prompt (cmd.exe):**
-    *   **Static Scanner only:**
-        ```cmd
-        python agniveer_sentinel.py scan --target test_targets\
-        ```
-    *   **Sandbox Fuzzer only:**
-        ```cmd
-        python agniveer_sentinel.py fuzz --target test_targets\tactical_comms.c
-        ```
-
-*   **On PowerShell:**
-    *   **Static Scanner only:**
-        ```powershell
-        python .\agniveer_sentinel.py scan --target .\test_targets\
-        ```
-    *   **Sandbox Fuzzer only:**
-        ```powershell
-        python .\agniveer_sentinel.py fuzz --target .\test_targets\tactical_comms.c
-        ```
-
----
-
-## 🧠 Supported AI Models (Multi-Provider Support)
-Agniveer-Sentinel dynamically routes code repair prompts to the client configured in `ACTIVE_PROVIDER` in your `.env`:
-*   **`gemini`** (Default): Uses Google `gemini-3.5-flash` model.
-*   **`openai`**: Uses OpenAI `gpt-4o-mini` model.
-*   **`anthropic`**: Uses Anthropic `claude-3-5-sonnet-20241022` model.
-<h1>(Coming Soon)</h1>
-
-*   **`local`**: Local mode using rule-based patch fallbacks (ideal for air-gapped sandboxes).
+```
+runs/
+└── RUN_2026-08-08_213819_sensor_sync/
+    ├── original.py             # Original vulnerable code snapshot
+    ├── patched.py              # Remediated code snapshot
+    ├── patch.diff              # Unified diff patch
+    ├── findings.json           # Detected CWE metadata & location
+    ├── reasoning.json          # Root-cause analysis & patch strategy
+    ├── fuzz_results.json       # Dynamic exploit payloads and crash telemetry
+    ├── regression_results.json # 5-point verification test status
+    └── final_report.json       # Consolidated machine-readable evidence
+```
 
 ---
 
 ## ⚖️ Disclaimer
-Agniveer-Sentinel is developed for educational, research, and authorized security evaluation purposes only. Running security analysis, dynamic fuzzing, and automated patching on target software should only be conducted on codebases you own or have explicit authorization to test. The authors and contributors are not responsible for any misuse, data loss, service interruption, or damages caused by the execution of this tool.
+Agniveer Sentinel is developed for authorized security evaluations, educational purposes, and defensive cyber-research. Always ensure you have authorization before analyzing and patching target codebases.
 
 ---
 
 ## 📄 License
-This project is open-source and licensed under the terms of the **[MIT License](LICENSE)**. Feel free to use, modify, and distribute it in accordance with the license conditions.
+This project is licensed under the **[MIT License](LICENSE)**.

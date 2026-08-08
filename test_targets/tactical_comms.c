@@ -13,12 +13,15 @@ void parse_packet(const char *raw_data) {
     struct RadioPacket packet;
     memset(&packet, 0, sizeof(packet));
 
-    // The vulnerability: copying input data of arbitrary length 
-    // into a fixed-size buffer without bounds checking.
-    // This allows a stack-based buffer overflow.
-    strcpy(packet.payload, raw_data);
+    // SECURE FIX: Check the length of raw_data before copying to prevent buffer overflow.
+    // We use strncpy to copy at most MAX_PAYLOAD_SIZE - 1 bytes, and manually ensure null-termination.
+    if (strlen(raw_data) >= MAX_PAYLOAD_SIZE) {
+        printf("[TACTICAL COMMS] [GUARD ALERT] Payload size exceeds maximum bounds. Truncating input safely.\n");
+    }
+    strncpy(packet.payload, raw_data, MAX_PAYLOAD_SIZE - 1);
+    packet.payload[MAX_PAYLOAD_SIZE - 1] = '\0'; // Explicit null termination
 
-    printf("[TACTICAL COMMS] Received packet from secure sender.\n");
+    printf("[TACTICAL COMMS] Received packet from sender.\n");
     printf("[TACTICAL COMMS] Payload data: %s\n", packet.payload);
 }
 

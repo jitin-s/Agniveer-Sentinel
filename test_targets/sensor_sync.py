@@ -1,18 +1,14 @@
 import sys
 import os
-import re
 
 def ping_sensor(sensor_ip):
     print(f"[SURVEILLANCE SYNC] Connecting to Border Sensor node at: {sensor_ip}")
     
-    # SECURE FIX: Sanitize and validate input to prevent command injection.
-    # We restrict inputs to valid IP addresses or hostnames using regex validation.
-    is_valid_ip = re.match(r"^[a-zA-Z0-9.-]+$", sensor_ip)
-    if not is_valid_ip or ";" in sensor_ip or "&" in sensor_ip or "|" in sensor_ip:
-        print("[SURVEILLANCE SYNC] [GUARD ALERT] Malicious command characters detected in sensor IP. Aborting.")
-        return
-        
+    # Vulnerability: Shell command execution via string concatenation of user input.
+    # Allows command injection (e.g. passing "127.0.0.1; whoami" or "127.0.0.1 & echo VULNERABLE").
     cmd = f"ping -n 1 {sensor_ip}"
+    
+    # Executing the command directly in shell
     exit_code = os.system(cmd)
     
     if exit_code == 0:

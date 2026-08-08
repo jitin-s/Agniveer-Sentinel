@@ -6,6 +6,10 @@ __pycache__/
 # Local Environment Variables (Contains API Keys - DO NOT COMMIT)
 .env
 
+# Generated Evidence Runs & Reports (Contains target source snapshots)
+runs/
+reports/
+
 # Temporary build / test files
 test_targets/sentinel_remediator*
 test_targets/temp_test*
