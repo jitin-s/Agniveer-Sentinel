@@ -46,7 +46,7 @@ Agniveer Sentinel implements a complete, closed-loop cyber-reasoning pipeline bu
 
 ---
 
-## 💻 CLI Commands Reference
+## 💻 CLI Commands Reference 
 
 Agniveer Sentinel provides 6 modular subcommands:
 
@@ -67,7 +67,7 @@ Agniveer Sentinel provides 6 modular subcommands:
 
 ---
 
-## 🚀 Setup & Installation Guide
+### 🚀 Setup & Installation Guide
 
 ### 1. Clone the GitHub Repository
 ```bash
