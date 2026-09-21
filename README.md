@@ -5,7 +5,7 @@
 
 ---
 
-## 🏛️ System Architecture
+## System Architecture
 
 Agniveer Sentinel implements a complete, closed-loop cyber-reasoning pipeline built for mission-critical and defense-grade environments:
 
