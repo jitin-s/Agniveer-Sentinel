@@ -1,5 +1,5 @@
-# Agniveer Sentinel (AI Kavach)
-### Autonomous AI Cyber-Reasoning & Remediation System (CRS)
+## Agniveer Sentinel (AI Kavach)
+#### Autonomous AI Cyber-Reasoning & Remediation System (CRS)
 
 > **"An autonomous AI cyber-reasoning and remediation system that detects vulnerabilities using static and dynamic analysis, reasons about their root cause, generates security patches, and autonomously verifies those patches through adversarial and regression testing."**
 
