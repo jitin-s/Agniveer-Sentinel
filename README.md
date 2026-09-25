@@ -4,7 +4,7 @@
 > **"An autonomous AI cyber-reasoning and remediation system that detects vulnerabilities using static and dynamic analysis, reasons about their root cause, generates security patches, and autonomously verifies those patches through adversarial and regression testing."**
 
 ---
-
+#
 ## System Architecture
 
 Agniveer Sentinel implements a complete, closed-loop cyber-reasoning pipeline built for mission-critical and defense-grade environments:
